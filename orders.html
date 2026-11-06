@@ -1,0 +1,428 @@
+?variant="standard" title="Complete orders.html code" id="73182"}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order History - Seasons 4 Ice Creams</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff5f5;
+        }
+
+        header {
+            background: white;
+            padding: 35px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            color: #e63946;
+            font-size: 38px;
+            font-weight: bold;
+        }
+
+        header p {
+            font-size: 18px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin: 25px;
+            padding: 14px 25px;
+            background: #e63946;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e63946;
+            margin: 35px 0;
+        }
+
+        #orders-container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        .order-header h2 {
+            color: #e63946;
+            margin: 0;
+        }
+
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .order-date {
+            font-size: 17px;
+            margin: 20px 0;
+        }
+
+        .item {
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .item p {
+            margin: 7px 0;
+            font-size: 16px;
+        }
+
+        .total {
+            text-align: right;
+            color: #e63946;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .message-box {
+            background: white;
+            padding: 45px 20px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .message-box h2 {
+            color: #e63946;
+        }
+
+        button {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        button:hover,
+        .back-btn:hover {
+            background: #c92f3b;
+        }
+
+        @media(max-width: 600px) {
+            .logo {
+                font-size: 27px;
+            }
+
+            .order-card {
+                padding: 20px;
+            }
+
+            .order-header {
+                gap: 15px;
+            }
+
+            .total {
+                font-size: 19px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            🍦 Seasons 4 Ice Creams
+        </div>
+
+        <p>My Order History</p>
+
+    </header>
+
+    <a href="index.html" class="back-btn">
+        ← Back to Home
+    </a>
+
+    <h1>My Orders 📦</h1>
+
+    <div id="orders-container">
+
+        <div class="message-box">
+            <h2>Loading Your Orders...</h2>
+            <p>Please wait.</p>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const API_URL = "http://127.0.0.1:5000/api/orders";
+
+        const container = document.getElementById("orders-container");
+
+
+        // FORMAT DATE
+
+        function formatDate(dateString) {
+
+            const date = new Date(dateString);
+
+            if (isNaN(date.getTime())) {
+                return dateString;
+            }
+
+            return date.toLocaleString("en-IN");
+
+        }
+
+
+        // DISPLAY ORDERS
+
+        function displayOrders(orders) {
+
+            container.innerHTML = "";
+
+            if (!orders || orders.length === 0) {
+
+                container.innerHTML = `
+                    <div class="message-box">
+                        <h2>No Orders Yet!</h2>
+                        <p>You haven't placed any orders.</p>
+
+                        <a href="products.html">
+                            <button>Explore Ice Creams</button>
+                        </a>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            orders.forEach(order => {
+
+                const card = document.createElement("div");
+
+                card.className = "order-card";
+
+
+                const header = document.createElement("div");
+
+                header.className = "order-header";
+
+
+                const orderTitle = document.createElement("h2");
+
+                orderTitle.textContent = "Order ID: " + order.id;
+
+
+                const status = document.createElement("span");
+
+                status.className = "status";
+
+                status.textContent = "Status: " + order.status;
+
+
+                header.appendChild(orderTitle);
+
+                header.appendChild(status);
+
+
+                const date = document.createElement("p");
+
+                date.className = "order-date";
+
+                date.textContent =
+                    "Order Date: " + formatDate(order.order_date);
+
+
+                card.appendChild(header);
+
+                card.appendChild(date);
+
+
+                // DISPLAY ORDER ITEMS
+
+                (order.items || []).forEach(item => {
+
+                    const itemDiv = document.createElement("div");
+
+                    itemDiv.className = "item";
+
+
+                    const name = document.createElement("h3");
+
+                    name.textContent = item.product_name;
+
+
+                    const price = document.createElement("p");
+
+                    price.textContent = "Price: ₹" + item.price;
+
+
+                    const quantity = document.createElement("p");
+
+                    quantity.textContent = "Quantity: " + item.quantity;
+
+
+                    const subtotal = document.createElement("p");
+
+                    subtotal.textContent = "Subtotal: ₹" + item.subtotal;
+
+
+                    itemDiv.appendChild(name);
+
+                    itemDiv.appendChild(price);
+
+                    itemDiv.appendChild(quantity);
+
+                    itemDiv.appendChild(subtotal);
+
+
+                    card.appendChild(itemDiv);
+
+                });
+
+
+                // DISPLAY TOTAL
+
+                const total = document.createElement("div");
+
+                total.className = "total";
+
+                total.textContent =
+                    "Total Amount: ₹" + order.total_amount;
+
+
+                card.appendChild(total);
+
+                container.appendChild(card);
+
+            });
+
+        }
+
+
+        // FETCH ORDERS FROM FLASK BACKEND
+
+        async function loadOrders() {
+
+            try {
+
+                const response = await fetch(
+                    API_URL,
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+
+                const result = await response.json();
+
+
+                // CHECK LOGIN
+
+                if (response.status === 401) {
+
+                    container.innerHTML = `
+                        <div class="message-box">
+                            <h2>Please Login First</h2>
+
+                            <p>
+                                Login to view your previous orders.
+                            </p>
+
+                            <a href="login.html">
+                                <button>Login</button>
+                            </a>
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error || "Unable to load orders"
+                    );
+
+                }
+
+
+                displayOrders(result);
+
+            }
+
+            catch(error) {
+
+                console.error("Order History Error:", error);
+
+                container.innerHTML = `
+                    <div class="message-box">
+
+                        <h2>Unable to Load Orders</h2>
+
+                        <p>
+                            ${error.message}
+                        </p>
+
+                        <button onclick="loadOrders()">
+                            Try Again
+                        </button>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        // LOAD ORDERS WHEN PAGE OPENS
+
+        loadOrders();
+
+    </script>
+
+</body>
+
+</html>

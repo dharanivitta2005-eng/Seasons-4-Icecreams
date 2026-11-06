@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seasons 4 - Admin Dashboard</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff7f7;
+    color: #333;
+}
+
+header {
+    background: #e63946;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h2 { margin: 0; }
+
+.container {
+    padding: 25px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+.stat-card h3 {
+    color: #777;
+    margin-top: 0;
+}
+
+.stat-card p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e63946;
+    margin-bottom: 0;
+}
+
+section {
+    background: white;
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+h2 { color: #e63946; }
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 65px;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #e63946;
+    color: white;
+    cursor: pointer;
+    margin: 4px;
+}
+
+button:hover { background: #c92d3b; }
+
+.secondary {
+    background: #555;
+}
+
+.danger {
+    background: #b42318;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background: #fff0f0;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.message {
+    padding: 15px;
+    text-align: center;
+}
+
+@media(max-width: 850px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 500px) {
+    .stats { grid-template-columns: 1fr; }
+    header { flex-direction: column; gap: 10px; }
+    .container { padding: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>🍦 Seasons 4 Admin Panel</h2>
+    <button onclick="location.href='index.html'">Visit Website</button>
+</header>
+
+<div class="container">
+
+    <!-- DASHBOARD STATISTICS -->
+    <h2>Dashboard Overview</h2>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Total Products</h3>
+            <p id="totalProducts">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Customers</h3>
+            <p id="totalCustomers">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p id="totalOrders">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p id="totalRevenue">₹0</p>
+        </div>
+    </div>
+
+
+    <!-- ADD PRODUCT -->
+    <section>
+        <h2>Manage Products</h2>
+
+        <h3 id="formHeading">Add New Ice Cream</h3>
+
+        <form id="productForm">
+
+            <input type="hidden" id="productId">
+
+            <input
+                type="text"
+                id="productName"
+                placeholder="Ice cream name"
+                required
+            >
+
+            <input
+                type="number"
+                id="productPrice"
+                placeholder="Price"
+                min="0.01"
+                step="0.01"
+                required
+            >
+
+            <input
+                type="number"
+                id="productStock"
+                placeholder="Available quantity"
+                min="0"
+                step="1"
+                value="10"
+                required
+            >
+
+            <input
+                type="text"
+                id="productCategory"
+                placeholder="Category"
+                required
+            >
+
+            <textarea
+                id="productDescription"
+                placeholder="Description"
+            ></textarea>
+
+            <button type="submit" id="saveButton">
+                Add Product
+            </button>
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="resetProductForm()"
+            >
+                Clear
+            </button>
+
+        </form>
+
+        <h3>Available Products</h3>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Available Qty</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="productsTable">
+                    <tr><td colspan="7">Loading products...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <!-- ORDERS -->
+    <section>
+        <h2>Manage Orders</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="ordersTable">
+                    <tr><td colspan="6">Loading orders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <!-- CUSTOMERS -->
+    <section>
+        <h2>Registered Customers</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Total Orders</th>
+                        <th>Total Spent</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customersTable">
+                    <tr><td colspan="5">Loading customers...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+
+<script>
+
+const API = "http://127.0.0.1:5000";
+
+async function apiRequest(path, options = {}) {
+
+    const response = await fetch(API + path, {
+        ...options,
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    if (response.status === 401 || response.status === 403) {
+        alert("Admin login required. Please login with your admin account.");
+        window.location.href = "login.html";
+        throw new Error("Admin authentication required");
+    }
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.error || "Request failed");
+    }
+
+    return result;
+}
+
+
+// LOAD DASHBOARD STATISTICS
+
+async function loadDashboard() {
+    try {
+        const data = await apiRequest("/api/admin/dashboard");
+
+        const stats = data.stats;
+
+        document.getElementById("totalProducts").textContent =
+            stats.total_products ?? 0;
+
+        document.getElementById("totalCustomers").textContent =
+            stats.total_customers ?? 0;
+
+        document.getElementById("totalOrders").textContent =
+            stats.total_orders ?? 0;
+
+        document.getElementById("totalRevenue").textContent =
+            "₹" + Number(stats.total_revenue || 0).toFixed(2);
+
+    } catch(error) {
+        console.error("Dashboard:", error);
+    }
+}
+
+
+// LOAD PRODUCTS
+
+async function loadProducts() {
+    const table = document.getElementById("productsTable");
+
+    try {
+        const products = await apiRequest("/api/admin/products");
+
+        table.innerHTML = "";
+
+        if (!products.length) {
+            table.innerHTML =
+                "<tr><td colspan='7'>No products found.</td></tr>";
+            return;
+        }
+
+        products.forEach(product => {
+            const row = document.createElement("tr");
+
+            const id = document.createElement("td");
+            id.textContent = product.id;
+
+            const name = document.createElement("td");
+            name.textContent = product.name;
+
+            const price = document.createElement("td");
+            price.textContent = "₹" + product.price;
+
+            const category = document.createElement("td");
+            category.textContent = product.category;
+
+            const stock = document.createElement("td");
+            stock.textContent = product.stock_quantity ?? 0;
+
+            const availability = document.createElement("td");
+            availability.textContent =
+                Number(product.stock_quantity) > 0 ? "In Stock" : "Out of Stock";
+            availability.style.color =
+                Number(product.stock_quantity) > 0 ? "green" : "#b42318";
+            availability.style.fontWeight = "bold";
+
+            const actions = document.createElement("td");
+
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.onclick = () => editProduct(product);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "danger";
+            deleteButton.onclick = () => deleteProduct(product.id);
+
+            actions.append(editButton, deleteButton);
+            row.append(id, name, price, category, stock, availability, actions);
+
+            table.appendChild(row);
+        });
+
+    } catch(error) {
+        table.innerHTML =
+            "<tr><td colspan='7'>Unable to load products.</td></tr>";
+        console.error(error);
+    }
+}
+
+
+// ADD OR UPDATE PRODUCT
+
+document.getElementById("productForm").addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const id = document.getElementById("productId").value;
+
+        const product = {
+            name: document.getElementById("productName").value.trim(),
+            price: Number(document.getElementById("productPrice").value),
+            stock_quantity: Number(document.getElementById("productStock").value),
+            category: document.getElementById("productCategory").value.trim(),
+            description: document.getElementById("productDescription").value.trim()
+        };
+
+        try {
+            if (id) {
+                await apiRequest("/api/admin/products/" + id, {
+                    method: "PUT",
+                    body: JSON.stringify(product)
+                });
+
+                alert("Product updated successfully!");
+            } else {
+                await apiRequest("/api/admin/products", {
+                    method: "POST",
+                    body: JSON.stringify(product)
+                });
+
+                alert("Product added successfully!");
+            }
+
+            resetProductForm();
+            loadProducts();
+            loadDashboard();
+
+        } catch(error) {
+            alert(error.message);
+        }
+    }
+);
+
+
+// EDIT PRODUCT
+
+function editProduct(product) {
+
+    document.getElementById("productId").value = product.id;
+    document.getElementById("productName").value = product.name;
+    document.getElementById("productPrice").value = product.price;
+    document.getElementById("productStock").value = product.stock_quantity ?? 0;
+    document.getElementById("productCategory").value = product.category;
+    document.getElementById("productDescription").value =
+        product.description || "";
+
+    document.getElementById("formHeading").textContent =
+        "Edit Ice Cream";
+
+    document.getElementById("saveButton").textContent =
+        "Update Product";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+// DELETE PRODUCT
+
+async function deleteProduct(id) {
+
+    if (!confirm("Are you sure you want to delete this product?")) {
+        return;
+    }
+
+    try {
+        await apiRequest("/api/admin/products/" + id, {
+            method: "DELETE"
+        });
+
+        alert("Product deleted successfully!");
+
+        loadProducts();
+        loadDashboard();
+
+    } catch(error) {
+        alert(error.message);
+    }
+}
+
+
+// RESET PRODUCT FORM
+
+function resetProductForm() {
+
+    document.getElementById("productForm").reset();
+    document.getElementById("productId").value = "";
+    document.getElementById("productStock").value = 10;
+
+    document.getElementById("formHeading").textContent =
+        "Add New Ice Cream";
+
+    document.getElementById("saveButton").textContent =
+        "Add Product";
+}
+
+
+// LOAD ORDERS
+
+async function loadOrders() {
+
+    const table = document.getElementById("ordersTable");
+
+    try {
+        const orders = await apiRequest("/api/admin/orders");
+
+        table.innerHTML = "";
+
+        if (!orders.length) {
+            table.innerHTML =
+                "<tr><td colspan='6'>No orders found.</td></tr>";
+            return;
+        }
+
+        orders.forEach(order => {
+
+            const row = document.createElement("tr");
+
+            const values = [
+                order.id,
+                order.customer_name || "Customer",
+                order.email || "-",
+                "₹" + Number(order.total_amount || 0).toFixed(2)
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const statusCell = document.createElement("td");
+            statusCell.textContent = order.status || "Placed";
+            row.appendChild(statusCell);
+
+            const actionCell = document.createElement("td");
+
+            const select = document.createElement("select");
+
+            [
+                "Placed",
+                "Processing",
+                "Dispatched",
+                "Delivered",
+                "Cancelled"
+            ].forEach(status => {
+                const option = document.createElement("option");
+                option.value = status;
+                option.textContent = status;
+
+                if (status === order.status) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
+
+            const updateButton = document.createElement("button");
+            updateButton.textContent = "Update";
+
+            updateButton.onclick = async () => {
+                try {
+                    await apiRequest(
+                        "/api/admin/orders/" + order.id + "/status",
+                        {
+                            method: "PUT",
+                            body: JSON.stringify({
+                                status: select.value
+                            })
+                        }
+                    );
+
+                    alert("Order status updated!");
+                    loadOrders();
+
+                } catch(error) {
+                    alert(error.message);
+                }
+            };
+
+            actionCell.append(select, updateButton);
+            row.appendChild(actionCell);
+
+            table.appendChild(row);
+        });
+
+    } catch(error) {
+        table.innerHTML =
+            "<tr><td colspan='6'>Unable to load orders.</td></tr>";
+        console.error(error);
+    }
+}
+
+
+// LOAD CUSTOMERS
+
+async function loadCustomers() {
+
+    const table = document.getElementById("customersTable");
+
+    try {
+        const customers = await apiRequest("/api/admin/customers");
+
+        table.innerHTML = "";
+
+        if (!customers.length) {
+            table.innerHTML =
+                "<tr><td colspan='5'>No customers found.</td></tr>";
+            return;
+        }
+
+        customers.forEach(customer => {
+
+            const row = document.createElement("tr");
+
+            const values = [
+                customer.id,
+                customer.name,
+                customer.email,
+                customer.order_count,
+                "₹" + Number(customer.total_spent || 0).toFixed(2)
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "-";
+                row.appendChild(cell);
+            });
+
+            table.appendChild(row);
+        });
+
+    } catch(error) {
+        table.innerHTML =
+            "<tr><td colspan='5'>Unable to load customers.</td></tr>";
+        console.error(error);
+    }
+}
+
+
+// LOAD EVERYTHING
+
+async function loadAdminDashboard() {
+    await loadDashboard();
+    await loadProducts();
+    await loadOrders();
+    await loadCustomers();
+}
+
+loadAdminDashboard();
+
+</script>
+
+</body>
+</html>

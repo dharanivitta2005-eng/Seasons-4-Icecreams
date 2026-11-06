@@ -1,0 +1,774 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Menu - Seasons 4 Ice Creams</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff7f7;
+}
+
+nav {
+    background: white;
+    padding: 20px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #e63946;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    margin: 10px;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #e63946;
+}
+
+.heading {
+    text-align: center;
+    padding: 30px 15px;
+}
+
+.heading h1 {
+    color: #e63946;
+    font-size: 38px;
+}
+
+.heading p {
+    font-size: 18px;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+    padding: 25px 40px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    background: #f5eeee;
+}
+
+.product-info {
+    padding: 18px;
+}
+
+.product-info h3 {
+    color: #e63946;
+    margin-top: 0;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.category {
+    color: #777;
+}
+
+.product-card button {
+    width: 100%;
+    padding: 12px;
+    background: #e63946;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.product-card button:hover {
+    background: #c92d3b;
+}
+
+.product-card button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.message {
+    text-align: center;
+    font-size: 18px;
+    padding: 30px;
+    grid-column: 1 / -1;
+}
+/* SEARCH AND CATEGORY FILTER */
+
+.filter-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-section input,
+.filter-section select {
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    min-width: 230px;
+}
+
+.filter-section button {
+    padding: 13px 22px;
+    background: #e63946;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.filter-section button:hover {
+    background: #c92d3b;
+}
+
+@media(max-width: 1000px) {
+    .products {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(max-width: 700px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 15px;
+    }
+}
+
+@media(max-width: 450px) {
+    .products {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        🍦 Seasons 4 Ice Creams
+    </div>
+
+    <div>
+        <a href="index.html">Home</a>
+        <a href="products.html">Menu</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="cart.html">Cart</a>
+        <a href="orders.html">My Orders</a>
+        <a href="login.html">Login</a>
+    </div>
+
+</nav>
+
+<div class="heading">
+
+    <h1>Our Delicious Ice Creams 🍨</h1>
+
+    <p>
+        Discover your favourite flavours at Seasons 4!
+    </p>
+
+</div>
+<div class="filter-section">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search your favourite ice cream..."
+    >
+
+    <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="cups">Cups</option>
+        <option value="cones">Cones</option>
+        <option value="sundaes">Sundaes</option>
+        <option value="kulfi">Kulfi</option>
+        <option value="candies">Candies</option>
+        <option value="novelties">Novelties</option>
+        <option value="carry home tubs">Carry Home Tubs</option>
+    </select>
+
+    <button onclick="clearFilters()">Clear</button>
+
+</div>
+
+<div id="database-products" class="products">
+    <div class="filter-section">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search your favourite ice cream..."
+    >
+
+    <select id="categoryFilter">
+
+        <option value="">All Categories</option>
+        <option value="cups">Cups</option>
+        <option value="cones">Cones</option>
+        <option value="sundaes">Sundaes</option>
+        <option value="kulfi">Kulfi</option>
+        <option value="candies">Candies</option>
+        <option value="novelties">Novelties</option>
+        <option value="carry home tubs">Carry Home Tubs</option>
+        <option value="milkeez">Milkeez</option>
+        <option value="dolly">Dolly</option>
+
+    </select>
+
+    <button onclick="clearFilters()">Clear</button>
+
+</div>
+
+    <p class="message">Loading delicious ice creams...</p>
+
+</div>
+
+
+<script>
+
+// IMAGE MAPPING
+
+const productImages = {
+
+    chocolate: "images/chocolate.jpg",
+    vanilla: "images/vanilla.jpg",
+    strawberry: "images/strawberry.jpg",
+    blackcurrant: "images/blackcurrent.jpg",
+    butterscotch: "images/butterscotch.jpg",
+    italianbounty: "images/italianbounty.jpg",
+    nuttycaramel: "images/nuttycaramel.jpg",
+    mango: "images/mango.jpg",
+    pista: "images/pista.jpg",
+    american: "images/americandryfruit.jpg",
+    arabian: "images/arabiandelight.jpg",
+    belgian: "images/belgiandarkchocolate.jpg",
+    chocobar: "images/chocobar.jpg",
+    honey: "images/honeyalmond.jpg",
+    tuttifruitti: "images/tuttifruitti.jpg",
+    chocoalmond: "images/chocoalmond.jpg"
+
+};
+
+
+// SELECT IMAGE BASED ON PRODUCT NAME
+
+function getProductImage(product) {
+
+    const name = (product.name || "").toLowerCase();
+
+    if (name.includes("chocobar")) {
+        return productImages.chocobar;
+    }
+
+    if (name.includes("choco almond")) {
+        return productImages.chocoalmond;
+    }
+
+    if (name.includes("italian bounty")) {
+        return productImages.italianbounty;
+    }
+
+    if (name.includes("nutty caramel")) {
+        return productImages.nuttycaramel;
+    }
+
+    if (name.includes("american dry fruit")) {
+        return productImages.american;
+    }
+
+    if (name.includes("arabian delight")) {
+        return productImages.arabian;
+    }
+
+    if (name.includes("belgian dark chocolate")) {
+        return productImages.belgian;
+    }
+
+    if (name.includes("honey almond")) {
+        return productImages.honey;
+    }
+
+    if (name.includes("tutti")) {
+        return productImages.tuttifruitti;
+    }
+
+    if (name.includes("blackcurrant") ||
+        name.includes("blackcurrent")) {
+        return productImages.blackcurrant;
+    }
+
+    if (name.includes("strawberry") ||
+        name.includes("raspberry")) {
+        return productImages.strawberry;
+    }
+
+    if (name.includes("butterscotch")) {
+        return productImages.butterscotch;
+    }
+
+    if (name.includes("vanilla")) {
+        return productImages.vanilla;
+    }
+
+    if (name.includes("mango")) {
+        return productImages.mango;
+    }
+
+    if (name.includes("pista")) {
+        return productImages.pista;
+    }
+
+    if (name.includes("chocolate") ||
+        name.includes("choco") ||
+        name.includes("brownie")) {
+        return productImages.chocolate;
+    }
+
+    return productImages.chocolate;
+
+}
+
+
+// PRODUCTS TO REMOVE
+
+const removedProducts = [
+
+    "choco brownie",
+    "choco brownioe",
+    "choco nut",
+    "choconut",
+    "banana berry",
+    "choco vanilla",
+    "cake fantasy",
+    "raspberry ripple",
+    "rasberry ripple",
+    "chappan bhog",
+    "mango dolly",
+    "raspberry dolly",
+    "orange milkeez",
+    "blackcurrant milkeez",
+    "blackcurrent milkeez",
+    "mango milkeez",
+    "pista kulfi",
+    "mango kulfi",
+    "hoccofest",
+    "chocofest",
+    "mango juicy",
+    "orange juicy",
+    "blackcurrant juicy",
+    "blackcurrent juicy",
+    "vanilla ball",
+    "strawberry fruit",
+    "mango fruit",
+    "swinger",
+    "pista nut",
+    "kaju kishmish",
+    "chowpaty kulfi",
+    "red velvet",
+    "tutti frutti",
+    "tutti fruity",
+    "tutti fruitti",
+    "tutti fruiti"
+    
+
+];
+
+
+// CHECK WHETHER PRODUCT MUST BE REMOVED
+
+function shouldRemoveProduct(product) {
+
+    const name = (product.name || "").toLowerCase().trim();
+
+    const category = (product.category || "").toLowerCase();
+
+    // Remove bulk packs
+    if (
+        category.includes("bulk") ||
+        name.includes("bulk") ||
+        name.includes("4000ml")
+    ) {
+        return true;
+    }
+
+    // Remove specified products
+    return removedProducts.some(item => name.includes(item));
+
+}
+
+
+// LOAD PRODUCTS FROM DATABASE
+
+async function loadProducts() {
+
+    const container =
+        document.getElementById("database-products");
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/products",
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load products");
+        }
+
+        const products = await response.json();
+
+        container.innerHTML = "";
+
+        // FILTER PRODUCTS
+
+        const availableProducts = products.filter(product => {
+
+            return !shouldRemoveProduct(product);
+
+        });
+
+
+        if (availableProducts.length === 0) {
+
+            container.innerHTML =
+                "<p class='message'>No ice creams available.</p>";
+
+            return;
+
+        }
+
+
+        // DISPLAY PRODUCTS
+
+        availableProducts.forEach(product => {
+
+            const card = document.createElement("div");
+
+            card.className = "product-card";
+
+
+            // PRODUCT IMAGE
+
+            const image = document.createElement("img");
+
+            image.src = getProductImage(product);
+
+            image.alt = product.name;
+
+            image.loading = "lazy";
+
+            image.onerror = function() {
+
+                this.onerror = null;
+
+                this.style.display = "none";
+
+            };
+
+
+            // PRODUCT DETAILS
+
+            const info = document.createElement("div");
+
+            info.className = "product-info";
+
+
+            const name = document.createElement("h3");
+
+            name.textContent = product.name;
+
+
+            const description = document.createElement("p");
+
+            description.textContent =
+                product.description ||
+                "Delicious ice cream flavour!";
+
+
+            const price = document.createElement("p");
+
+            price.className = "price";
+
+            price.textContent = "₹" + product.price;
+
+
+            const category = document.createElement("p");
+
+            category.className = "category";
+
+            category.textContent =
+                "Category: " +
+                (product.category || "Ice Cream");
+
+
+            // ADD TO CART BUTTON
+
+            const button = document.createElement("button");
+
+            button.textContent = "Add to Cart 🛒";
+
+            button.addEventListener("click", function() {
+
+                addToCart(product.id, button);
+
+            });
+
+
+            info.appendChild(name);
+
+            info.appendChild(description);
+
+            info.appendChild(price);
+
+            info.appendChild(category);
+
+            info.appendChild(button);
+
+
+            card.appendChild(image);
+
+            card.appendChild(info);
+
+            container.appendChild(card);
+
+        });
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <p class="message">
+                Unable to load products.
+                Please check whether your Flask backend is running.
+            </p>
+        `;
+
+    }
+
+}
+
+
+// ADD PRODUCT TO CART
+
+async function addToCart(productId, button) {
+
+    button.disabled = true;
+
+    button.textContent = "Adding...";
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/cart",
+            {
+                method: "POST",
+
+                credentials: "include",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    product_id: productId,
+
+                    quantity: 1
+
+                })
+
+            }
+        );
+
+
+        const result = await response.json();
+
+
+        if (!response.ok) {
+
+            if (response.status === 401) {
+
+                alert(
+                    "Please login before adding products to your cart."
+                );
+
+                window.location.href = "login.html";
+
+                return;
+
+            }
+
+            throw new Error(
+                result.error || "Unable to add product"
+            );
+
+        }
+
+
+        alert("🍦 Product added to cart successfully!");
+
+        button.textContent = "Added ✓";
+
+    }
+
+    catch(error) {
+
+        console.error("Cart Error:", error);
+
+        alert(error.message);
+
+        button.textContent = "Add to Cart 🛒";
+
+    }
+
+    finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+// LOAD PRODUCTS WHEN PAGE OPENS
+
+loadProducts();
+// SEARCH AND CATEGORY FILTER
+
+function filterProducts() {
+
+    const searchText = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const selectedCategory = document
+        .getElementById("categoryFilter")
+        .value
+        .toLowerCase();
+
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+
+        const productName = card
+            .querySelector("h3")
+            .textContent
+            .toLowerCase();
+
+        const productDescription = card
+            .querySelector(".product-info p")
+            .textContent
+            .toLowerCase();
+
+        const productCategory = card
+            .querySelector(".category")
+            .textContent
+            .toLowerCase();
+
+        const matchesSearch =
+            productName.includes(searchText) ||
+            productDescription.includes(searchText);
+
+        const matchesCategory =
+            selectedCategory === "" ||
+            productCategory.includes(selectedCategory);
+
+        card.style.display =
+            matchesSearch && matchesCategory ? "" : "none";
+
+    });
+
+}
+
+
+function clearFilters() {
+
+    document.getElementById("searchInput").value = "";
+
+    document.getElementById("categoryFilter").value = "";
+
+    filterProducts();
+
+}
+
+
+document.getElementById("searchInput")
+    .addEventListener("input", filterProducts);
+
+document.getElementById("categoryFilter")
+    .addEventListener("change", filterProducts);
+
+
+// LOAD PRODUCTS WHEN PAGE OPENS
+
+loadProducts();
+// SEARCH AND CATEGORY FILTER
+
+
+
+
+</script>
+
+</body>
+</html>
+```

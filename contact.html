@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Seasons 4 Ice Creams</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#fafafa;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#e63946;
+}
+
+nav a{
+text-decoration:none;
+color:#333;
+margin-left:20px;
+font-weight:600;
+}
+
+.hero{
+height:40vh;
+background:
+linear-gradient(rgba(0,0,0,0.4),
+rgba(0,0,0,0.4)),
+url('https://images.unsplash.com/photo-1563805042-7684c019e1cb');
+background-size:cover;
+background-position:center;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+text-align:center;
+}
+
+.hero h1{
+font-size:60px;
+}
+
+.contact{
+max-width:900px;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.contact h2{
+color:#e63946;
+margin-bottom:20px;
+}
+
+.contact p{
+font-size:18px;
+margin-bottom:15px;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:15px;
+margin-top:20px;
+}
+
+input, textarea{
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+background:#e63946;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+footer{
+background:#222;
+color:white;
+text-align:center;
+padding:30px;
+margin-top:50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+🍦 Seasons 4 Ice Creams
+</div>
+
+<div>
+<a href="index.html">Home</a>
+<a href="products.html">Products</a>
+<a href="about.html">About</a>
+<a href="cart.html">Cart</a>
+</div>
+
+</nav>
+
+<section class="hero">
+    <h1>Contact Us</h1>
+</section>
+
+<section class="contact">
+
+<h2>Get In Touch</h2>
+
+<p><b>📍 Address:</b> Nellore , Andhra Pradesh India</p>
+<p><b>📞 Phone:</b> +91 9912723012</p>
+<p><b>📧 Email:</b> icecreamsnellore@gmail.com</p>
+
+<form>
+
+<input type="text" placeholder="Your Name" required>
+
+<input type="email" placeholder="Your Email" required>
+
+<textarea rows="5" placeholder="Your Message"></textarea>
+
+<button onclick="alert('Thank you for contacting us!')">
+    Send Message
+</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<h3>Seasons 4 Ice Creams</h3>
+<p>Great Taste Every Season</p>
+
+</footer>
+
+</body>
+</html>
