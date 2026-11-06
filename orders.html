@@ -192,7 +192,11 @@
 
     <script>
 
-        const API_URL = "http://127.0.0.1:5000/api/orders";
+        const API_URL =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1"
+                ? "http://127.0.0.1:5000/api/orders"
+                : "/api/orders";
 
         const container = document.getElementById("orders-container");
 

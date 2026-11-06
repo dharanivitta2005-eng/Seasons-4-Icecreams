@@ -62,7 +62,16 @@ gap:20px;
 font-size:24px;
 cursor:pointer;
 }
+nav a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 15px;
+    font-weight: 600;
+}
 
+nav a:hover {
+    color: #e63946;
+}
 /* HERO */
 
 .hero{
@@ -245,34 +254,29 @@ display:none;
 
 <body>
 
+
+
 <!-- NAVBAR -->
-
 <nav>
+    <div class="logo">
+        🍦 Seasons 4 Ice Creams
+    </div>
 
+    <div>
+        <a href="index.html">Home</a>
+        <a href="products.html">Menu</a>
+        <a href="products.html">Bulk Packs</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="register.html">Register</a>
+        <a href="login.html">Login</a>
+        <a href="orders.html">My Orders</a>
+    </div>
 
-
-<div class="logo">
-🍦 Seasons 4 Ice Creams
-</div>
-
-<div>
-<a href="index.html">Home</a>
-<a href="products.html">Menu</a>
-<a href="products.html">Bulk Packs</a>
-<a href="about.html">About Us</a>
-<a href="contact.html">Contact</a>
-<a href="register.html">Register</a>
-<a href="login.html">Login</a>
-<a href="orders.html">My Orders</a>
-</div>
-
-</nav>
-
-<div class="icons">
-❤️
-🛒
-</div>
-
+    <div class="icons">
+        <a href="wishlist.html">❤️</a>
+        <a href="cart.html">🛒</a>
+    </div>
 </nav>
 
 <!-- HERO -->
@@ -358,9 +362,7 @@ onclick="window.location.href='cart.html'">
 
 </section>
 
-<!-- WHY US -->
 
-<section class="why">
 
 <!-- WHY US -->
 

@@ -187,11 +187,16 @@
 
             registerButton.disabled = true;
             registerButton.textContent = "Creating Account...";
+            const API_BASE =
+                window.location.hostname === "localhost" ||
+                window.location.hostname === "127.0.0.1"
+                    ? "http://127.0.0.1:5000"
+                    : "";
 
             try {
 
                 const response = await fetch(
-                    "http://127.0.0.1:5000/api/register",
+                    `${API_BASE}/api/register`,
                     {
                         method: "POST",
 

@@ -169,11 +169,16 @@
             message.textContent = "";
             loginButton.disabled = true;
             loginButton.textContent = "Logging in...";
+            const API_BASE =
+                window.location.hostname === "localhost" ||
+                window.location.hostname === "127.0.0.1"
+                    ? "http://127.0.0.1:5000"
+                    : "";
 
             try {
 
                 const response = await fetch(
-                    "http://127.0.0.1:5000/api/login",
+                    `${API_BASE}/api/login`,
                     {
                         method: "POST",
 

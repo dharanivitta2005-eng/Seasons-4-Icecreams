@@ -5,3 +5,5 @@ __pycache__/
 *.db
 *.sqlite3
 icecreams_backup*
+backend/seasons4_admin_backend/
+backend/seasons4_admin_backend.zip
